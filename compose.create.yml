@@ -1,6 +1,6 @@
 services:
   app:
-    image: 'nest.js:create'
+    image: 'nest.js-10.4:create'
     build:
       context: ./
       dockerfile: ./docker/Dockerfile
