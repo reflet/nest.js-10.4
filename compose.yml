@@ -1,0 +1,14 @@
+services:
+  app:
+    image: 'nest.js:local'
+    build:
+      context: ./
+      dockerfile: ./docker/Dockerfile
+      target: development
+    volumes:
+      - ./src:/usr/src/app
+      #- /usr/src/app/dist
+      - /usr/src/app/node_modules
+    ports:
+      - "3000:3000"
+    entrypoint: npm run start:dev

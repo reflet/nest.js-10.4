@@ -1,0 +1,12 @@
+services:
+  app:
+    image: 'nest.js:create'
+    build:
+      context: ./
+      dockerfile: ./docker/Dockerfile
+      target: create
+    tty: true
+    volumes:
+      - ./src:/usr/src/app
+    ports:
+      - "3000:3000"
