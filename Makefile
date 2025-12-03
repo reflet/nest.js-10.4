@@ -28,6 +28,19 @@ version: ## NestJSのバージョンを表示します。
 test: ## ブラウザで動作確認します。
 	@open http://localhost:3000
 
+.PHONY: test-unit
+test-unit: ## 単体テストを実行します。
+	@docker compose exec app bash -c "npm run test"
+
+.PHONY: test-e2e
+test-e2e: ## E2Eテストを実行します。
+	@docker compose exec app bash -c "npm run test:e2e"
+
+.PHONY: test-coverage
+test-coverage: ## カバレッジを実行します。
+	@docker compose exec app bash -c "npm run test:cov"
+
+
 .PHONY: down
 down: ## dockerコンテナを終了します。
 	@docker compose down --remove-orphans

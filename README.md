@@ -1,6 +1,6 @@
 # 概要
 
-Nest.js 環境を docker で構築してみる。
+[Nest.js](https://github.com/nestjs/nest) 環境を docker で構築してみる。
 
 ## ミドルウェア
 
@@ -75,5 +75,23 @@ docker compose -f compose.create.yml exec app bash -c "nest new --strict ."
 # dockerコンテナ終了
 docker compose -f compose.create.yml down
 ```
+
+## デプロイ
+
+NestJS アプリケーションを本番環境にデプロイする準備ができたら、  
+可能な限り効率的に動作するようにするための重要なステップがいくつかあります。
+
+詳細については、[デプロイメントドキュメント](https://docs.nestjs.com/deployment)を確認してください。
+
+NestJS アプリケーションをデプロイするクラウドベースのプラットフォームをお探しの場合は、AWS 上で NestJS アプリケーションをデプロイするための公式プラットフォームである[Mau](https://mau.nestjs.com)をご確認ください。
+
+Mau は、わずか数ステップでデプロイを簡単かつ迅速に行えます：
+
+```bash
+$ npm install -g mau
+$ mau deploy
+```
+
+Mau を使用すれば、わずか数クリックでアプリケーションをデプロイでき、インフラストラクチャの管理ではなく、機能の構築に集中できます。
 
 以上

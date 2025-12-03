@@ -1,99 +1,116 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Nest.js プロジェクトのフォルダ構成ガイド
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## 推奨フォルダ構成
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
-
-```bash
-$ npm install
+```
+src/
+├── main.ts                    # アプリケーションのエントリーポイント
+├── app.module.ts              # ルートモジュール
+├── app.controller.ts          # ルートコントローラー（オプション）
+├── app.service.ts             # ルートサービス（オプション）
+│
+├── users/                     # 機能モジュール（例：ユーザー管理）
+│   ├── users.module.ts        # モジュール定義
+│   ├── users.controller.ts    # コントローラー
+│   ├── users.service.ts       # サービス（ビジネスロジック）
+│   ├── dto/                   # Data Transfer Objects
+│   │   ├── create-user.dto.ts
+│   │   └── update-user.dto.ts
+│   ├── entities/              # データベースエンティティ（使用する場合）
+│   │   └── user.entity.ts
+│   └── users.controller.spec.ts  # テストファイル
+│
+├── products/                  # 別の機能モジュール（例：商品管理）
+│   ├── products.module.ts
+│   ├── products.controller.ts
+│   ├── products.service.ts
+│   └── dto/
+│
+├── common/                    # 共通機能
+│   ├── guards/                # ガード（認証・認可）
+│   │   └── auth.guard.ts
+│   ├── interceptors/          # インターセプター
+│   │   └── logging.interceptor.ts
+│   ├── pipes/                 # パイプ（バリデーション・変換）
+│   │   └── validation.pipe.ts
+│   ├── filters/               # 例外フィルター
+│   │   └── http-exception.filter.ts
+│   ├── decorators/            # カスタムデコレータ
+│   │   └── roles.decorator.ts
+│   └── interfaces/            # インターフェース
+│
+├── config/                    # 設定ファイル
+│   ├── database.config.ts
+│   └── app.config.ts
+│
+└── database/                  # データベース関連（使用する場合）
+    ├── database.module.ts
+    └── migrations/
 ```
 
-## Compile and run the project
+## 構成の原則
+
+### 1. **機能ごとにモジュールを分ける**
+
+- 各機能（users, products, ordersなど）を独立したモジュールとして作成
+- モジュール内にcontroller, service, dtoなどを含める
+- 関連するファイルを同じフォルダに配置することで、保守性が向上
+
+### 2. **DTO（Data Transfer Object）の使用**
+
+- リクエスト/レスポンスのデータ構造を定義
+- バリデーションや型安全性を確保
+- `dto/`フォルダに配置
+
+### 3. **共通機能の分離**
+
+- 複数のモジュールで使用する機能は`common/`に配置
+- Guards, Interceptors, Pipes, Filtersなど
+
+### 4. **設定の管理**
+
+- 環境変数や設定値は`config/`フォルダで管理
+- 環境ごとの設定ファイルを分けることも可能
+
+## モジュールの作成例
+
+新しい機能モジュールを作成する場合：
 
 ```bash
-# development
-$ npm run start
+# Nest CLIを使用（推奨）
+nest generate module users
+nest generate controller users
+nest generate service users
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+# または手動で作成
 ```
 
-## Run tests
+## インポートの例
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+```typescript
+// app.module.ts
+@Module({
+  imports: [
+    UsersModule, // ユーザーモジュール
+    ProductsModule, // 商品モジュール
+    // ...
+  ],
+  controllers: [AppController],
+  providers: [AppService],
+})
+export class AppModule {}
 ```
 
-## Deployment
+## エンドポイントの例
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+この構成により、以下のようなエンドポイントが自動的に整理されます：
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+- `GET /users` → UsersController
+- `GET /users/:id` → UsersController
+- `POST /users` → UsersController
+- `GET /products` → ProductsController
+- `POST /products` → ProductsController
 
-```bash
-$ npm install -g mau
-$ mau deploy
-```
+各コントローラーで`@Controller('users')`のようにプレフィックスを指定することで、自動的にルーティングが設定されます。
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+以上
