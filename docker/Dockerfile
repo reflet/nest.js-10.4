@@ -1,7 +1,7 @@
 ############################################################################
 # CREATE PROJECT
 ############################################################################
-FROM node:22.12.0-alpine as create
+FROM node:22.12.0-alpine AS create
 
 ENV NODE_ENV development
 
@@ -23,7 +23,7 @@ WORKDIR /usr/src/app
 ############################################################################
 # DEVELOPMENT
 ############################################################################
-FROM node:22.12.0-alpine as development
+FROM node:22.12.0-alpine AS development
 
 ENV NODE_ENV development
 
@@ -41,6 +41,7 @@ RUN npm run build
 
 EXPOSE 3000
 
+#ENTRYPOINT [ "npm", "run", "start" ]
 ENTRYPOINT [ "npm", "run", "start:dev" ]
 
 
@@ -66,4 +67,5 @@ RUN npm run build
 
 EXPOSE 3000
 
-ENTRYPOINT ["node", "dist/main.js"]
+ENTRYPOINT [ "node", "dist/main.js" ]
+#ENTRYPOINT [ "npm", "run", "start:prod" ]
